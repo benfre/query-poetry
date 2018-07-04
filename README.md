@@ -2,11 +2,19 @@
 
 ## requirement
 
-'regex' for better unicode support (not the buildin 're' package), 
+1. chinese-poetry (https://github.com/chinese-poetry/chinese-poetry)
 
-'pyopencc_pure' for chinese convert (https://github.com/benfre/OpenCC/tree/benfre_master/python/pyopencc_pure)
+clone chinese-poetry to  "..\chinese-poetry"
 
+2. 'regex' for better unicode support (not the buildin 're' package), 
+```
+pip install regex
+```
+
+3. 'pyopencc_pure' for chinese convert (https://github.com/benfre/OpenCC/tree/benfre_master/python/pyopencc_pure).
 Other opencc wrapper could replace pyopencc_pure, the cnverting code need be changed.
+
+clone the benfre_master branch (https://github.com/benfre/OpenCC/tree/benfre_master), build whell, and install wheel.
 
 ## convert json to pickle for fast read
 
