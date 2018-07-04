@@ -1,4 +1,5 @@
-# query all tang and song peotry / ci
+# query-poetry
+query all tang and song poetry / ci using regex
 
 ## requirement
 
@@ -28,7 +29,8 @@ query string is in simplified chinese, automatically convert to traditional chin
 
 Examples:
 
-- For a word: `python .\query-word.py 乱花` > 26 + 101 results
+- For a word: `python .\query-word.py 乱` > 1042 + 8287 results
+- For a word combination: `python .\query-word.py 乱花` > 26 + 101 results
 - For beginning of paragraph: `python .\query-word.py ^乱花` ==> 8 + 20 results
 - For 7 word in a paragraph: `python .\query-word.py "[眼乱人日花欲迷渐西]{7}"` ==> 1 results
 ```
