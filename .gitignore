@@ -1,2 +1,4 @@
 .vscode
 tang_poetrys.p
+venv
+*.pyc

@@ -29,19 +29,49 @@ for filename in os.listdir(poetry_directory):
     if "poet.song." in filename:
         fi = open(poetry_directory+"\\"+filename, 'r', encoding='utf-8')
         poetryi = json.load(fi, encoding='utf-8')
-        tang_poetrys = tang_poetrys + poetryi
+        fi.close()
+        tang_poetrys.extend(poetryi)
     if "poet.tang." in filename:
         fi = open(poetry_directory+"\\"+filename, 'r', encoding='utf-8')
         poetryi = json.load(fi, encoding='utf-8')
-        tang_poetrys = tang_poetrys + poetryi
+        fi.close()
+        tang_poetrys.extend(poetryi)
 ci_directory = "..\\chinese-poetry\\ci"
 for filename in os.listdir(ci_directory):
     if "ci.song." in filename:
         fi = open(ci_directory+"\\"+filename, 'r', encoding='utf-8')
         poetryi = json.load(fi, encoding='utf-8')
-        tang_poetrys = tang_poetrys + poetryi      
+        fi.close()
+        tang_poetrys.extend(poetryi)
+lunyu_directory = "..\\chinese-poetry\\lunyu"
+for filename in os.listdir(lunyu_directory):
+    if ".json" in filename:
+        fi = open(lunyu_directory+"\\"+filename, 'r', encoding='utf-8')
+        poetryi = json.load(fi, encoding='utf-8')
+        fi.close()
+        tang_poetrys.extend(poetryi)  
+shijing_directory = "..\\chinese-poetry\\shijing"
+for filename in os.listdir(shijing_directory):
+    if ".json" in filename:
+        fi = open(shijing_directory+"\\"+filename, 'r', encoding='utf-8')
+        poetryi = json.load(fi, encoding='utf-8')
+        fi.close()
+        tang_poetrys.extend(poetryi)   
+shijing_directory = "..\\chinese-poetry\\shijing"
+for filename in os.listdir(shijing_directory):
+    if ".json" in filename:
+        fi = open(shijing_directory+"\\"+filename, 'r', encoding='utf-8')
+        poetryi = json.load(fi, encoding='utf-8')
+        fi.close()
+        tang_poetrys.extend(poetryi)   
+
+wudai_directory = "..\\chinese-poetry\\wudai\\花间集\\"
+for filename in os.listdir(wudai_directory):
+    if ".json" in filename:
+        fi = open(wudai_directory+"\\"+filename, 'r', encoding='utf-8')
+        poetryi = json.load(fi, encoding='utf-8')
+        fi.close()
+        tang_poetrys.extend(poetryi)
 print(len(tang_poetrys))
 
 pickle.dump( tang_poetrys, open( "tang_poetrys.p", "wb" ) )
-
-
