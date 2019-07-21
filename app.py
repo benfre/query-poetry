@@ -30,6 +30,8 @@ def query_poetry(query_string='^绿树', fisrt_n = 40):
                         results.append([peotry['title'], peotry['author'], para])
                     elif 'rhythmic' in peotry:
                         results.append([peotry['rhythmic'], peotry['author'], para])
+                    elif 'chapter' in peotry:
+                        results.append([peotry['chapter'], '孔丘', para])
                     para_count = para_count +1
             if para_count>fisrt_n:
                 break
@@ -48,8 +50,9 @@ def main_query():
         para_count, results = query_poetry(word, 40)
         if para_count < 40:
             word_t = pyopencc_pure.convert(s2t_config, word)
-            para_count_t, results_t = query_poetry(word_t, 40-para_count)
-            results.extend(results_t)
+            if word_t != word: 
+                para_count_t, results_t = query_poetry(word_t, 40-para_count)
+                results.extend(results_t)
 
     return render_template('index.html', query_word=word,errors=errors, results=results)
 
