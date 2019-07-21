@@ -39,7 +39,7 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/', methods=['GET', 'POST'])
-def hello():
+def main_query():
     errors = []
     results = []
     word = None
@@ -53,9 +53,6 @@ def hello():
 
     return render_template('index.html', query_word=word,errors=errors, results=results)
 
-@app.route('/<name>')
-def hello_name(name):
-    return "Hello {}!".format(name)
 
 if __name__ == '__main__':
     app.run()
