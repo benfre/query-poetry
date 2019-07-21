@@ -25,11 +25,17 @@ def query_poetry(query_string='^绿树', fisrt_n = 40):
         if content:
             for para in content:
                 ma = reg_obj.search(para)
+                if 'author' in peotry.keys():
+                    author = peotry['author']
+                elif "section" in peotry.keys():
+                    author = peotry['section']
+                else:
+                    author = "unkown"
                 if ma is not None:
                     if 'title' in peotry:
-                        results.append([peotry['title'], peotry['author'], para])
+                        results.append([peotry['title'], author, para])
                     elif 'rhythmic' in peotry:
-                        results.append([peotry['rhythmic'], peotry['author'], para])
+                        results.append([peotry['rhythmic'], author, para])
                     elif 'chapter' in peotry:
                         results.append([peotry['chapter'], '孔丘', para])
                     para_count = para_count +1
