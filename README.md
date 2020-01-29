@@ -17,6 +17,11 @@ Other opencc wrapper could replace pyopencc_pure, the cnverting code need be cha
 
 clone the benfre_master branch (https://github.com/benfre/OpenCC/tree/benfre_master), build whell, and install wheel.
 
+## flask app
+
+Using flash app to do the query online, see requirements.txt for dependency.
+
+
 ## convert json to pickle for fast read
 
 The following command takes about 10 seconds:

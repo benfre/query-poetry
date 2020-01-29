@@ -30,6 +30,9 @@
                 <br/>
             </div>
             <div class="col-lg-6">
+                {% if more %}
+                    <a href={{ "/?regex=" ~query_word ~ "&start=" ~ stop }}>More results</a>
+                {% endif %}
                 {% if results %}
                 <h2>Query {{ query_word }} result: {{ results|length }}</h2>
                 <br>
