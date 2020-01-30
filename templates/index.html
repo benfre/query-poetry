@@ -10,6 +10,30 @@
         .container {
           max-width: 1900px;
         }
+        .button-wrapper {
+            display: block;
+            text-align: center;
+            padding-top: 0.5em;
+        }
+        a {
+            text-decoration: none;
+            color: black; 
+        }
+        .button {
+            border: none;
+            border-radius: 1em;
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+            display: inline-block;
+            font-size: 2em;
+            padding: 0em 2em;
+            width: auto;
+            background-color: #EDE;
+        }
+        .button:hover {
+            background-color: #DEE;
+            text-decoration: none;
+            color: black; 
+        }
       </style>
 </head>
 <body>
@@ -30,11 +54,15 @@
                 <br/>
             </div>
             <div class="col-lg-6">
-                {% if more %}
-                    <a href={{ "/?regex=" ~query_word ~ "&start=" ~ stop }}>More results</a>
-                {% endif %}
                 {% if results %}
-                <h2>Query {{ query_word }} result: {{ results|length }}</h2>
+                {% if more %}
+                <h3>Query "{{ query_word }}" has more than {{ results|length }} results.</h3>
+                <div class="button-wrapper">
+                    <a class="button" href={{ "/?regex=" ~query_word ~ "&start=" ~ stop }}>More results</a>
+                  </div>
+                {% else %}
+                <h3>Query "{{ query_word }}" has {{ results|length }} results.</h3>
+                {% endif %}
                 <br>
                 <div id="results">
                     <table class="table table-striped" style="max-width: 900px;">

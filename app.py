@@ -1,12 +1,13 @@
 import os
 import requests
 import pickle
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, escape, Markup
 import pyopencc_pure
 import regex
 
 tang_poetrys = pickle.load( open( "tang_poetrys.p", 'rb') )
 s2t_config = pyopencc_pure.load_config('s2t.json')
+t2s_config = pyopencc_pure.load_config('t2s.json')
 
 def query_poetry(query_string='^绿树', fisrt_n = 40, start = 0):
     results = []
@@ -47,6 +48,18 @@ def query_poetry(query_string='^绿树', fisrt_n = 40, start = 0):
                     break
     return para_count, results, more, end
 
+def query_poetry_ts(query_string='^绿树', fisrt_n = 40, start = 0):
+    para_count, results, more, end = query_poetry(query_string, fisrt_n, start)
+    word = query_string
+    if para_count < fisrt_n:
+        word_t = pyopencc_pure.convert(s2t_config, query_string)
+        if word_t != query_string: 
+            para_count_t, results_t, more, end = query_poetry(word_t, fisrt_n-para_count, start = 0)
+            results.extend(results_t)
+            para_count += para_count_t
+            word = word_t
+    return para_count, results, more, end, word
+    
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
@@ -59,19 +72,15 @@ def main_query():
     more = False
     if request.method == "POST":
         word = request.form['regex']
-        para_count, results, more, end = query_poetry(word, 40, start = 0)
-        if para_count < 40:
-            word_t = pyopencc_pure.convert(s2t_config, word)
-            if word_t != word: 
-                para_count_t, results_t, more, end = query_poetry(word_t, 40-para_count, start = 0)
-                results.extend(results_t)
+        word = pyopencc_pure.convert(t2s_config, word)
+        para_count, results, more, end, word = query_poetry_ts(word, 40, start = 0)
     if request.method == "GET":
-        word = request.args.get('regex')
+        word = str(Markup(request.args.get('regex')))
         if word is not None:
             start = int(request.args.get('start', default = 0))
-            para_count, results, more, end = query_poetry(word, 40, start = start)
+            para_count, results, more, end, word = query_poetry_ts(word, 40, start)
 
-    return render_template('index.html', query_word=word,errors=errors, results=results, more =more, stop =end)
+    return render_template('index.html', query_word=escape(word), errors=errors, results=results, more=more, stop=end)
 
 
 if __name__ == '__main__':
