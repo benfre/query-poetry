@@ -6,10 +6,11 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SECRET_KEY = b'\x1d\xc1j\xba\x94\xda\xed\x9d\x92^6\xa5\x85\x1c\xd2\x98'
 
 
 class ProductionConfig(Config):
+    DEVELOPMENT = False
     DEBUG = False
 
 

@@ -40,16 +40,13 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-2">
-                <h1>Query Poetry</h1>
-                <form role="form" method='POST' action='/'>
+                <h1>Query Author</h1>
+                <form role="form" method='POST' action='/authors.html'>
                 <div class="form-group">
-                    <input type="text" name="regex" class="form-control" id="regex-box" placeholder="Query RegEx" {% if query_word  %}value="{{ query_word  }}"{% endif %} style="max-width: 300px;" autofocus required>
+                    <input type="author" name="author name" class="form-control" id="author-box" placeholder="李白" {% if query_word  %}value="{{ query_word  }}"{% endif %} style="max-width: 300px;" autofocus required>
                 </div>
                 <button type="submit" class="btn btn-default">Query</button>
                 </form>
-                <div class="button-wrapper">
-                <a class="button" href="/authors.html">Query Authors</a>
-              </div>
                 <br>
                 {% for error in errors %}
                 <h4>{{ error }}</h4>
@@ -61,7 +58,7 @@
                 {% if more %}
                 <h3>Query "{{ query_word }}" has more than {{ results|length }} results.</h3>
                 <div class="button-wrapper">
-                    <a class="button" href={{ "/?regex=" ~query_word ~ "&start=" ~ stop }}>More results</a>
+                    <a class="button" href={{ "/authors.html?regex=" ~query_word ~ "&start=" ~ stop }}>More results</a>
                   </div>
                 {% else %}
                 <h3>Query "{{ query_word }}" has {{ results|length }} results.</h3>

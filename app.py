@@ -59,29 +59,95 @@ def query_poetry_ts(query_string='^绿树', fisrt_n = 40, start = 0):
             para_count += para_count_t
             word = word_t
     return para_count, results, more, end, word
-    
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
 
-@app.route('/', methods=['GET', 'POST'])
-def main_query():
-    errors = []
+def query_author(query_string, fisrt_n = 40, start = 0):
     results = []
-    word = None
-    end = 0
+    para_count = 0
     more = False
-    if request.method == "POST":
-        word = request.form['regex']
-        word = pyopencc_pure.convert(t2s_config, word)
-        para_count, results, more, end, word = query_poetry_ts(word, 40, start = 0)
-    if request.method == "GET":
-        word = str(Markup(request.args.get('regex')))
-        if word is not None:
-            start = int(request.args.get('start', default = 0))
-            para_count, results, more, end, word = query_poetry_ts(word, 40, start)
+    reg_obj = regex.compile(query_string)
+    poetrys_size = len(tang_poetrys)
+    end = poetrys_size
 
-    return render_template('index.html', query_word=escape(word), errors=errors, results=results, more=more, stop=end)
+    if poetrys_size > start:
+        for i in range(start, poetrys_size):
+            peotry = tang_poetrys[i]
+            if 'author' in peotry.keys():
+                author = peotry['author']
+            elif "section" in peotry.keys():
+                continue # 诗经作者？
+            else:
+                author = "孔子，孔丘，孔夫子"
+                
+            ma = reg_obj.search(author)
+            if ma is not None:
+                content = None
+                if 'paragraphs' in peotry.keys() and len(peotry['paragraphs'])>0:
+                    content = peotry['paragraphs']
+                if 'content' in peotry.keys() and len(peotry['content'])>0:
+                    content = peotry['content']
+
+                if 'title' in peotry:
+                    results.append([peotry['title'], author, content])
+                elif 'rhythmic' in peotry:
+                    results.append([peotry['rhythmic'], author, content])
+                elif 'chapter' in peotry:
+                    results.append([peotry['chapter'], '孔丘', content])
+                para_count = para_count +1
+                if para_count>=fisrt_n:
+                    more = True
+                    end = i + 1
+                    break
+    return para_count, results, more, end
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(os.environ['APP_SETTINGS'])
+
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
+    @app.route('/', methods=['GET', 'POST'])
+    def main_query():
+        errors = []
+        results = []
+        word = None
+        end = 0
+        more = False
+        if request.method == "POST":
+            word = request.form['regex']
+            word = pyopencc_pure.convert(t2s_config, word)
+            para_count, results, more, end, word = query_poetry_ts(word, 40, start = 0)
+        if request.method == "GET":
+            word = str(Markup(request.args.get('regex')))
+            if word is not None:
+                start = int(request.args.get('start', default = 0))
+                para_count, results, more, end, word = query_poetry_ts(word, 40, start)
+
+        return render_template('index.html', query_word=escape(word), errors=errors, results=results, more=more, stop=end)
+
+    @app.route('/authors.html', methods=['GET', 'POST'])
+    def authors():
+        errors = []
+        results = []
+        word = None
+        end = 0
+        more = False
+        if request.method == 'POST':
+            word = request.form['author name']
+            word = pyopencc_pure.convert(t2s_config, word)
+            para_count, results, more, end = query_author(word, 40, start = 0)
+        if request.method == 'GET':
+            word = str(Markup(request.args.get('regex')))
+            if word is not None:
+                start = int(request.args.get('start', default = 0))
+                para_count, results, more, end = query_author(word, 40, start)
+        return render_template('authors.html', query_word=escape(word), errors=errors, results=results, more=more, stop=end)
+
+    return app
 
 
 if __name__ == '__main__':
+    app = create_app()
     app.run()

@@ -57,21 +57,21 @@ for filename in os.listdir(shijing_directory):
         poetryi = json.load(fi, encoding='utf-8')
         fi.close()
         tang_poetrys.extend(poetryi)   
-shijing_directory = "..\\chinese-poetry\\shijing"
-for filename in os.listdir(shijing_directory):
-    if ".json" in filename:
-        fi = open(shijing_directory+"\\"+filename, 'r', encoding='utf-8')
-        poetryi = json.load(fi, encoding='utf-8')
-        fi.close()
-        tang_poetrys.extend(poetryi)   
 
-wudai_directory = "..\\chinese-poetry\\wudai\\花间集\\"
+wudai_directory = "..\\chinese-poetry\\wudai\\huajianji\\"
 for filename in os.listdir(wudai_directory):
     if ".json" in filename:
         fi = open(wudai_directory+"\\"+filename, 'r', encoding='utf-8')
         poetryi = json.load(fi, encoding='utf-8')
         fi.close()
         tang_poetrys.extend(poetryi)
+
+nantang_filename ="..\\chinese-poetry\\wudai\\nantang\\poetrys.json"
+fi = open(nantang_filename, 'r', encoding='utf-8')
+poetryi = json.load(fi, encoding='utf-8')
+fi.close()
+tang_poetrys.extend(poetryi)
+
 print(len(tang_poetrys))
 
 pickle.dump( tang_poetrys, open( "tang_poetrys.p", "wb" ) )
